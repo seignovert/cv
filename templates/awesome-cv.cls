@@ -68,13 +68,15 @@
 \RequirePackage{setspace}
 % Needed to manage fonts
 \RequirePackage[quiet]{fontspec}
+% Needed to stop tabular from overflowing to many pages
+\RequirePackage{longtable}
 % To support LaTeX quoting style
 \defaultfontfeatures{Ligatures=TeX}
 % Needed to manage math fonts
 \RequirePackage{unicode-math}
 % Needed to use icons from font-awesome
 % (https://github.com/posquit0/latex-fontawesome)
-\RequirePackage{fontawesome}
+\RequirePackage{templates/fontawesome}
 \RequirePackage[default,opentype]{sourcesanspro}
 % Needed for the photo ID
 \RequirePackage[skins]{tcolorbox}
@@ -152,9 +154,13 @@
 \setbool{acvSectionColorHighlight}{true}
 
 % Awesome section color
-\def\@sectioncolor#1#2#3{%
-  \ifbool{acvSectionColorHighlight}{{\color{awesome}#1#2#3}}{#1#2#3}%
+%\def\@sectioncolor#1#2#3{%
+%  \ifbool{acvSectionColorHighlight}{{\color{awesome}#1#2#3}}{#1#2#3}%
+%}
+\newcommand{\sectioncolor}[1]{%
+	\ifbool{acvSectionColorHighlight}{{\color{awesome}#1}}{#1}%
 }
+
 
 
 %-------------------------------------------------------------------------------
@@ -195,7 +201,7 @@
 \newcommand*{\headersocialstyle}[1]{{\fontsize{6.8pt}{1em}\headerfont\color{text} #1}}
 \newcommand*{\headerquotestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\itshape\color{darktext} #1}}
 \newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
-\newcommand*{\sectionstyle}[1]{{\fontsize{16pt}{1em}\bodyfont\bfseries\color{text}\@sectioncolor #1}}
+\newcommand*{\sectionstyle}[1]{{\fontsize{16pt}{1em}\bodyfont\bfseries\color{text}\sectioncolor{#1}}}
 \newcommand*{\subsectionstyle}[1]{{\fontsize{12pt}{1em}\bodyfont\scshape\textcolor{text}{#1}}}
 \newcommand*{\paragraphstyle}{\fontsize{9pt}{1em}\bodyfontlight\upshape\color{text}}
 
@@ -277,6 +283,10 @@
 % Usage: \mobile{<mobile number>}
 \newcommand*{\mobile}[1]{\def\@mobile{#1}}
 
+% Defines writer's phone (optional)
+% Usage: \phone{<phone number>}
+\newcommand*{\phone}[1]{\def\@phone{#1}}
+
 % Defines writer's email (optional)
 % Usage: \email{<email adress>}
 \newcommand*{\email}[1]{\def\@email{#1}}
@@ -284,6 +294,10 @@
 % Defines writer's homepage (optional)
 % Usage: \homepage{<url>}
 \newcommand*{\homepage}[1]{\def\@homepage{#1}}
+
+% Defines writer's git repo (optional)
+% Usage: \git{<git-nick>}{git-url}
+\newcommand*{\git}[2]{\def\@git{#1}\def\@gitrepo{#2}}
 
 % Defines writer's github (optional)
 % Usage: \github{<github-nick>}
@@ -326,6 +340,18 @@
 % Defines writer's quote (optional)
 % Usage: \quote{<quote>}
 \renewcommand*{\quote}[1]{\def\@quote{#1}}
+
+% Defines writer's left footer (optional)
+% Usage: \lfooter{<left-footer>}
+\newcommand*{\lfooter}[1]{\def\@lfooter{#1}}
+
+% Defines writer's center footer (optional)
+% Usage: \cfooter{<center-footer>}
+\newcommand*{\cfooter}[1]{\def\@cfooter{#1}}
+
+% Defines writer's right footer (optional)
+% Usage: \rfooter{<right-footer>}
+\newcommand*{\rfooter}[1]{\def\@rfooter{#1}}
 
 % Defines recipient's information (cover letter only)
 % Usage: \recipient{<recipient name>}{<recipient address>}
@@ -388,6 +414,10 @@
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
+\newcolumntype{T}[1]{>{\begin{minipage}[t]{#1}\raggedright{}}c<{\end{minipage}}}
+\newcolumntype{K}[1]{
+>{\begin{minipage}[t]{#1}\raggedleft{}\let\newline\\\arraybackslash}c<{\end{minipage}}}
+
 % Use to draw horizontal line with specific thickness
 \def\vhrulefill#1{\leavevmode\leaders\hrule\@height#1\hfill \kern\z@}
 
@@ -442,6 +472,12 @@
           \faMobile\acvHeaderIconSep\@mobile%
           \setbool{isstart}{false}%
         }%
+      \ifthenelse{\isundefined{\@phone}}%
+        {}%
+        {%
+          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
+          \faPhone\acvHeaderIconSep\@phone%
+        }%
       \ifthenelse{\isundefined{\@email}}%
         {}%
         {%
@@ -452,13 +488,19 @@
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{http://\@homepage}{\faHome\acvHeaderIconSep\@homepage}%
+          \href{https://\@homepage}{\faGlobe\acvHeaderIconSep\@homepage}%
+        }%
+      \ifthenelse{\isundefined{\@git}}%
+        {}%
+        {%
+          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
+          \href{\@gitrepo}{\faCodeFork\acvHeaderIconSep\@git}%
         }%
       \ifthenelse{\isundefined{\@github}}%
         {}%
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://github.com/\@github}{\faGithubSquare\acvHeaderIconSep\@github}%
+          \href{https://github.com/\@github}{\faGithubAlt\acvHeaderIconSep\@github}%
         }%
       \ifthenelse{\isundefined{\@gitlab}}%
         {}%
@@ -520,12 +562,13 @@
 
 % Define a footer for CV
 % Usage: \makecvfooter{<left>}{<center>}{<right>}
-\newcommand*{\makecvfooter}[3]{%
+\newcommand*{\makecvfooter}{%
   \fancyfoot{}
-  \fancyfoot[L]{\footerstyle{#1}}
-  \fancyfoot[C]{\footerstyle{#2}}
-  \fancyfoot[R]{\footerstyle{#3}}
+  \fancyfoot[L]{\footerstyle{\@lfooter}}
+  \fancyfoot[C]{\footerstyle{\@cfooter}}
+  \fancyfoot[R]{\footerstyle{\@rfooter}}
 }
+
 
 % Define a section for CV
 % Usage: \cvsection{<section-title>}
@@ -616,6 +659,25 @@
 % Define a line of cv information(honor, award or something else)
 % Usage: \cvhonor{<position>}{<title>}{<location>}{<date>}
 \newcommand*{\cvhonor}[4]{%
+  \honordatestyle{#4} & \honorpositionstyle{#1}, \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+}
+
+% Define an environment for cvpublications
+\newenvironment{cvpublications}{%
+  \vspace{\acvSectionContentTopSkip}
+  \vspace{-2mm}
+  \begin{center}
+    \setlength\tabcolsep{0pt}
+    \setlength{\extrarowheight}{0pt}
+    %\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
+    \begin{longtable}{@{\extracolsep{\fill}} T{1.5cm} T{\textwidth - 4.0cm} K{2.5cm}}
+}{%
+	\end{longtable}
+    %\end{tabular*}
+  \end{center}
+}
+% Define a line of cv information(honor, award or something else)
+\newcommand*{\cvpublication}[4]{%
   \honordatestyle{#4} & \honorpositionstyle{#1}, \honortitlestyle{#2} & \honorlocationstyle{#3} \\
 }
 
