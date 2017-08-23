@@ -225,6 +225,13 @@
 \newcommand*{\honordatestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\color{graytext} #1}}
 \newcommand*{\honorlocationstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\slshape\color{awesome} #1}}
 
+% For elements of publication
+\newcommand*{\publicationsectionstyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
+\newcommand*{\publicationtitlestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\scshape\color{darktext} #1}}
+\newcommand*{\publicationauthorsstyle}[1]{{\fontsize{8pt}{1em}\bodyfont\itshape\color{graytext} #1}}
+\newcommand*{\publicationjournalstyle}[1]{{\fontsize{8pt}{1em}\bodyfontlight\slshape\color{graytext} #1}}
+\newcommand*{\publicationdatestyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\slshape\color{awesome} #1}}
+
 % For elements of skill
 \newcommand*{\skilltypestyle}[1]{{\fontsize{10pt}{1em}\bodyfont\bfseries\color{darktext} #1}}
 \newcommand*{\skillsetstyle}[1]{{\fontsize{9pt}{1em}\bodyfontlight\color{text} #1}}
@@ -651,7 +658,7 @@
   \begin{center}
     \setlength\tabcolsep{0pt}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{2.0cm} L{\textwidth - 4.5cm} R{2.5cm}}
 }{%
     \end{tabular*}
   \end{center}
@@ -659,27 +666,59 @@
 % Define a line of cv information(honor, award or something else)
 % Usage: \cvhonor{<position>}{<title>}{<location>}{<date>}
 \newcommand*{\cvhonor}[4]{%
-  \honordatestyle{#4} & \honorpositionstyle{#1}, \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+  \honordatestyle{#4} &
+  \honorpositionstyle{#1}\ifthenelse{\equal{#2}{}}
+  {}
+  {, \honortitlestyle{#2}}
+  & \honorlocationstyle{#3} \\
 }
 
 % Define an environment for cvpublications
-\newenvironment{cvpublications}{%
+\newenvironment{cvpublications}[1]{%
   \vspace{\acvSectionContentTopSkip}
   \vspace{-2mm}
+  \publicationsectionstyle{#1}
+  \vspace{1mm}
+  \setlength\tabcolsep{0pt}
+  \setlength{\extrarowheight}{0pt}
   \begin{center}
-    \setlength\tabcolsep{0pt}
-    \setlength{\extrarowheight}{0pt}
-    %\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{1.5cm} L{\textwidth - 4.0cm} R{2.5cm}}
-    \begin{longtable}{@{\extracolsep{\fill}} T{1.5cm} T{\textwidth - 4.0cm} K{2.5cm}}
 }{%
-	\end{longtable}
-    %\end{tabular*}
   \end{center}
 }
-% Define a line of cv information(honor, award or something else)
-\newcommand*{\cvpublication}[4]{%
-  \honordatestyle{#4} & \honorpositionstyle{#1}, \honortitlestyle{#2} & \honorlocationstyle{#3} \\
+% Define an entry of cv information
+% Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}
+\newcommand*{\cvpublication}[6]{%
+  \vspace{-1mm}
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{.75cm} L{\textwidth - 4.25cm} R{3.5cm}}
+    \descriptionstyle{#1} &%
+    \ifempty{#6}%
+      {\publicationtitlestyle{#2} & \publicationdatestyle{#4} \\
+      &\publicationauthorsstyle{#3} & \publicationjournalstyle{#5}}%
+      {\href{#6}{\publicationtitlestyle{#2}} & \publicationdatestyle{#4} \\
+      &\href{#6}{\publicationauthorsstyle{#3}} & \publicationjournalstyle{#5}}%
+  \end{tabular*}%
 }
+
+% \newenvironment{cvpublications}[1]{%
+%   \vspace{\acvSectionContentTopSkip}
+%   \vspace{-2mm}
+%   \subsectionstyle{#1}
+%   \begin{center}
+%     \setlength\tabcolsep{0pt}
+%     \setlength{\extrarowheight}{0pt}
+%     \begin{longtable}{@{\extracolsep{\fill}} C{1cm} L{\textwidth - 3.5cm} K{2.5cm}}
+% }{%
+% 	 \end{longtable}
+%   \end{center}
+% }
+% Define a line of cv information(honor, award or something else)
+% \newcommand*{\cvpublication}[5]{%
+%   \honordatestyle{#1} &
+%   \ifthenelse{\equal{#5}{}}
+%     {\honorpositionstyle{#2}, }
+%     {\href{#5}{\honorpositionstyle{#2}}, }
+%   \honortitlestyle{#3} & \honorlocationstyle{#4} \\
+% }
 
 % Define an environment for cvskill
 \newenvironment{cvskills}{%
