@@ -202,7 +202,7 @@
 \newcommand*{\headerquotestyle}[1]{{\fontsize{9pt}{1em}\bodyfont\itshape\color{darktext} #1}}
 \newcommand*{\footerstyle}[1]{{\fontsize{8pt}{1em}\footerfont\scshape\color{lighttext} #1}}
 \newcommand*{\sectionstyle}[1]{{\fontsize{16pt}{1em}\bodyfont\bfseries\color{text}\sectioncolor{#1}}}
-\newcommand*{\subsectionstyle}[1]{{\fontsize{12pt}{1em}\bodyfont\scshape\textcolor{text}{#1}}}
+\newcommand*{\subsectionstyle}[1]{{\fontsize{12pt}{1em}\bodyfont\upshape\textcolor{text}{#1}}}
 \newcommand*{\paragraphstyle}{\fontsize{9pt}{1em}\bodyfontlight\upshape\color{text}}
 
 % For elements of entry
@@ -590,7 +590,7 @@
 % Usage: \cvsubsection{<subsection-title>}
 \newcommand{\cvsubsection}[1]{%
   \vspace{\acvSectionContentTopSkip}
-  \vspace{-3mm}
+  \vspace{-2mm}
   \subsectionstyle{#1}
   \phantomsection
 }
@@ -619,11 +619,13 @@
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
-    \ifempty{#2#3}
-      {\entrypositionstyle{#1} & \entrydatestyle{#4} \\}
-      {\entrytitlestyle{#2} & \entrylocationstyle{#3} \\
-      \entrypositionstyle{#1} & \entrydatestyle{#4} \\}
-    \multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}}
+    \ifempty{#1#3}
+      {\entrypositionstyle{#2} & \entrydatestyle{#4}}%
+      {\entrytitlestyle{#1} & \entrylocationstyle{#3} \\
+      \entrypositionstyle{#2} & \entrydatestyle{#4}}%
+    \ifempty{#5}%
+      {}%
+      {\\\multicolumn{2}{L{\textwidth}}{\descriptionstyle{#5}}}%
   \end{tabular*}%
 }
 
@@ -658,7 +660,7 @@
   \begin{center}
     \setlength\tabcolsep{0pt}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{2.0cm} L{\textwidth - 4.5cm} R{2.5cm}}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} C{2.0cm} L{\textwidth - 6cm} R{4cm}}
 }{%
     \end{tabular*}
   \end{center}
@@ -677,7 +679,9 @@
 \newenvironment{cvpublications}[1]{%
   \vspace{\acvSectionContentTopSkip}
   \vspace{-2mm}
-  \publicationsectionstyle{#1}
+  \ifempty{#1}
+    {}%
+    {\publicationsectionstyle{#1}}%
   \vspace{1mm}
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
@@ -699,27 +703,6 @@
   \end{tabular*}%
 }
 
-% \newenvironment{cvpublications}[1]{%
-%   \vspace{\acvSectionContentTopSkip}
-%   \vspace{-2mm}
-%   \subsectionstyle{#1}
-%   \begin{center}
-%     \setlength\tabcolsep{0pt}
-%     \setlength{\extrarowheight}{0pt}
-%     \begin{longtable}{@{\extracolsep{\fill}} C{1cm} L{\textwidth - 3.5cm} K{2.5cm}}
-% }{%
-% 	 \end{longtable}
-%   \end{center}
-% }
-% Define a line of cv information(honor, award or something else)
-% \newcommand*{\cvpublication}[5]{%
-%   \honordatestyle{#1} &
-%   \ifthenelse{\equal{#5}{}}
-%     {\honorpositionstyle{#2}, }
-%     {\href{#5}{\honorpositionstyle{#2}}, }
-%   \honortitlestyle{#3} & \honorlocationstyle{#4} \\
-% }
-
 % Define an environment for cvskill
 \newenvironment{cvskills}{%
   \vspace{\acvSectionContentTopSkip}
@@ -727,7 +710,7 @@
   \begin{center}
     \setlength\tabcolsep{1ex}
     \setlength{\extrarowheight}{0pt}
-    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} r L{\textwidth * \real{0.9}}}
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l L{\textwidth * \real{0.9}}}
 }{%
     \end{tabular*}
   \end{center}
