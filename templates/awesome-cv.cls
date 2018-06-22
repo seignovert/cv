@@ -736,6 +736,13 @@
   \vspace{-4.0mm}
 }
 
+\newcommand*{\cvwebsite}[2]{%
+  \texttt{%
+    \normalfont%
+    \color{awesome-nephritis}
+    \href{#1}{#2}%
+}}
+
 
 %-------------------------------------------------------------------------------
 %                Commands for elements of Cover Letter
