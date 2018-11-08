@@ -1,7 +1,7 @@
 Resume / Curriculum Vitae
 ==========================
 
-![GitHub release](https://img.shields.io/github/release/seignovert/cv.svg)
+[![GitHub release](https://img.shields.io/github/release/seignovert/cv.svg)](https://github.com/seignovert/cv/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/seignovert/cv.svg)](https://github.com/seignovert/cv/blob/master/LICENCE.md)
 
 This respository store the academic resume and curriculum vitae for Benoît Seignovert (Jet Propulsion Laboratory, Pasadena, CA USA).
