@@ -9,7 +9,7 @@ Resume / Curriculum Vitae
 
 This repository store the academic resume and curriculum vitae for Benoît Seignovert (Jet Propulsion Laboratory, Pasadena, CA USA).
 
-![CV 1st page](img/cv-0.jpg)
+![CV 1st page](cv/cv-0.jpg)
 
 Credit
 -------
