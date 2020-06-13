@@ -14,17 +14,17 @@ RUN apt-get update && \
 WORKDIR /root
 
 # Install TeXlive
-COPY texlive.profile .
-COPY texlive.sh .
+COPY docker/texlive.profile /root/texlive.profile
+COPY docker/texlive.sh /root/texlive.sh
 RUN sh texlive.sh
 
 # Install missing packages
-COPY packages.sh .
-RUN sh packages.sh
+COPY docker/packages.sh /root/packages.sh
+RUN sh docker/packages.sh
 
 # Clean config
-RUN rm -f texlive.profile \
-          texlive.sh \
-          packages.sh
+RUN rm -f /root/texlive.profile \
+          /root/texlive.sh \
+          /root/packages.sh
 
 WORKDIR /latex
