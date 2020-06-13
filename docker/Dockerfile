@@ -16,11 +16,11 @@ WORKDIR /root
 # Install TeXlive
 COPY docker/texlive.profile /root/texlive.profile
 COPY docker/texlive.sh /root/texlive.sh
-RUN sh texlive.sh
+RUN sh /root/texlive.sh
 
 # Install missing packages
 COPY docker/packages.sh /root/packages.sh
-RUN sh docker/packages.sh
+RUN sh /root/packages.sh
 
 # Clean config
 RUN rm -f /root/texlive.profile \
