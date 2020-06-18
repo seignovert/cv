@@ -5,16 +5,13 @@ env:
   FILENAME: Seignovert-CV
 
 on:
-  push
-  # push:
-  #   tags-ignore:
-  #     - '*'
-  #   branches:
-  #     - master
-  #   paths:
-  #     - '**.tex'
-  #     - '**.cls'
-  #     - '**.sty'
+  push:
+    branches:
+      - master
+    paths:
+      - '**.tex'
+      - '**.cls'
+      - '**.sty'
 
 jobs:
   build:
