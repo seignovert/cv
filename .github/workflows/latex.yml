@@ -3,6 +3,7 @@ name: LaTeX CI
 env:
   MAIN_TEX: cv.tex
   FILENAME: Seignovert-CV
+  RELEASE: Curriculum Vitae
 
 on:
   push
@@ -15,30 +16,30 @@ on:
   #     - '**.sty'
 
 jobs:
-  build:
-    name: XeLaTeX
-    runs-on: ubuntu-latest
-    container:
-      image: seignovert/latex-cv
+  # build:
+  #   name: XeLaTeX
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: seignovert/latex-cv
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      # Run twice to include lastpage reference
-      - name: Build CV
-        run: |
-          xelatex -jobname=output ${MAIN_TEX}
-          xelatex -jobname=output ${MAIN_TEX}
+  #     # Run twice to include lastpage reference
+  #     - name: Build CV
+  #       run: |
+  #         xelatex -jobname=output ${MAIN_TEX}
+  #         xelatex -jobname=output ${MAIN_TEX}
 
-      - name: Save PDF
-        uses: actions/upload-artifact@v2
-        with:
-          name: pdf
-          path: output.pdf
+  #     - name: Save PDF
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: pdf
+  #         path: output.pdf
 
   create_release:
     name: Github Release
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest
 
     steps:
@@ -51,31 +52,34 @@ jobs:
             LAST_TAG=$(git tag --sort=creatordate | tr '\n' ' ' | sed -e "s/ $NEW_TAG //" | tr ' ' '\n' | tail -1)
             CHANGELOG=$(git log --pretty='format:- %s' $LAST_TAG..HEAD)
 
-            echo $LAST_TAG
-            echo $CHANGELOG
-
             # Multilines escape
             CHANGELOG="${CHANGELOG//'%'/'%25'}"
             CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
             CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
 
+            echo ::set-env name=PREVIOUS_TAG::"$LAST_TAG"
             echo ::set-env name=RELEASE_TAG::"$NEW_TAG"
-            echo ::set-env name=RELEASE_NAME::"$(date +'%Y/%m/%d') - Curriculum Vitae"
+            echo ::set-env name=RELEASE_NAME::"$(date +'%Y/%m/%d') - ${RELEASE}"
             echo ::set-env name=RELEASE_BODY::"$CHANGELOG"
             echo ::set-env name=RELEASE_PDF::"$(date +'%Y')-${FILENAME}.pdf"
 
-      - name: Retreive PDF
-        uses: actions/download-artifact@v2
-        with:
-          name: pdf
+      - name: Test
+        run: |
+          echo ${PREVIOUS_TAG}
+          echo ${CHANGELOG}
 
-      - name: Publish release
-        uses: meeDamian/github-release@2.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ env.RELEASE_TAG }}
-          name: ${{ env.RELEASE_NAME }}
-          body: ${{ env.RELEASE_BODY }}
-          files: ${{ env.RELEASE_PDF }}:output.pdf
-          gzip: false
-          allow_override: true
+      # - name: Retreive PDF
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: pdf
+
+      # - name: Publish release
+      #   uses: meeDamian/github-release@2.0
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     tag: ${{ env.RELEASE_TAG }}
+      #     name: ${{ env.RELEASE_NAME }}
+      #     body: ${{ env.RELEASE_BODY }}
+      #     files: ${{ env.RELEASE_PDF }}:output.pdf
+      #     gzip: false
+      #     allow_override: true
