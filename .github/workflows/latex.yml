@@ -76,4 +76,5 @@ jobs:
           name: ${{ env.RELEASE_NAME }}
           body: ${{ env.RELEASE_BODY }}
           files: ${{ env.RELEASE_PDF }}:output.pdf
+          gzip: false
           allow_override: true
