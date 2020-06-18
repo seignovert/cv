@@ -48,7 +48,7 @@ jobs:
         id: tag
         run: |
             NEW_TAG=$(date +'%Y.%m.%d')
-            LAST_TAG=$(git tag --sort=creatordate | tr '\n' ' ' | sed -e "s/ $NEW_TAG //" | tr ' ' '\n | tail -1')
+            LAST_TAG=$(git tag --sort=creatordate | tr '\n' ' ' | sed -e "s/ $NEW_TAG //" | tr ' ' '\n' | tail -1)
             CHANGELOG=$(git log --pretty='format:- %s' $LAST_TAG..HEAD)
 
             echo $LAST_TAG
