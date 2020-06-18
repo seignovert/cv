@@ -1,0 +1,79 @@
+name: LaTeX CI
+description: Build PDF with LaTeX and publish it to Github releases
+
+env:
+  MAIN_TEX: cv.tex
+  FILENAME: Seignovert-CV
+
+on:
+  push:
+    branches:
+      - master
+    tags-ignore:
+      - '*'
+    paths:
+      - '**.tex'
+      - '**.cls'
+      - '**.sty'
+
+jobs:
+  build:
+    name: XeLaTeX
+    runs-on: ubuntu-latest
+    container:
+      image: seignovert/latex-cv
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Run twice to include lastpage reference
+      - name: Build CV
+        run: |
+          xelatex -jobname=output ${MAIN_TEX}
+          xelatex -jobname=output ${MAIN_TEX}
+
+      - name: Save PDF
+        uses: actions/upload-artifact@v1
+        with:
+          name: pdf
+          path: output.pdf
+
+  create_release:
+    name: Github Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up tag
+        id: tag
+        run: |
+            NEW_TAG=$(date +'%Y.%m.%d')
+            LAST_TAG=$(git tag --sort=creatordate | tr '\n' ' ' | sed -e "s/ $NEW_TAG //" | tr ' ' '\n | tail -1')
+            CHANGELOG=$(git log --pretty='format:- %s' $LAST_TAG..HEAD)
+
+            # Multilines escape
+            CHANGELOG="${CHANGELOG//'%'/'%25'}"
+            CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+            CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+
+            echo ::set-env name=RELEASE_TAG::"$NEW_TAG"
+            echo ::set-env name=RELEASE_NAME::"$(date +'%Y/%m/%d') - Curriculum Vitae"
+            echo ::set-env name=RELEASE_BODY::"$CHANGELOG"
+            echo ::set-env name=RELEASE_PDF::"$(date +'%Y')-${FILENAME}.pdf"
+
+      - name: Retreive PDF
+        uses: actions/download-artifact@v1
+        with:
+          name: pdf
+
+      - name: Publish release
+        uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_NAME }}
+          body: ${{ env.RELEASE_BODY }}
+          files: ${{ env.RELEASE_PDF }}:output.pdf
+          allow_override: true
