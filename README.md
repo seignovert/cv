@@ -1,6 +1,7 @@
 Resume / Curriculum Vitae
 ==========================
 
+[![LaTeX CI](https://github.com/seignovert/cv/workflows/LaTeX%20CI/badge.svg)](https://github.com/seignovert/cv/actions?query=workflow%3A%22LaTeX+CI%22)
 [![GitHub release](https://img.shields.io/github/release/seignovert/cv.svg)](https://github.com/seignovert/cv/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/seignovert/cv.svg)](https://github.com/seignovert/cv/blob/master/LICENCE.md)
 [![PDF](https://img.shields.io/badge/-PDF-orange.svg?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAAAM1BMVEUAAAD%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2B3leKCAAAAEHRSTlMANjxBWWJtgKSl4eLy9fz9qpcRhAAAAEpJREFUeNqNzEsOgCAQBFFQYPAHdf%2FTOkPGBBMX1u4lnQ5fFSgTBeQnD0a7czlN1xomu9yPUoOeY8wdWrJTda0qEKW3aWJjb4zf3XKSBKbPN4tKAAAAAElFTkSuQmCC)][download]
