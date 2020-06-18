@@ -54,11 +54,6 @@ jobs:
             LAST_TAG=$(git tag --sort=creatordate | tr '\n' ' ' | sed -e "s/ $NEW_TAG //" | tr ' ' '\n' | tail -1)
             CHANGELOG=$(git log --pretty='format:- %s' $LAST_TAG..HEAD)
 
-            # Multilines escape
-            CHANGELOG="${CHANGELOG//'%'/'%25'}"
-            CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
-            CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
-
             echo ::set-env name=PREVIOUS_TAG::"$LAST_TAG"
             echo ::set-env name=RELEASE_TAG::"$NEW_TAG"
             echo ::set-env name=RELEASE_NAME::"$(date +'%Y/%m/%d') - ${RELEASE}"
